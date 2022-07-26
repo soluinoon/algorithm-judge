@@ -1,4 +1,4 @@
-// 문자열
+
 // 5430 AC
 
 import java.io.*;
