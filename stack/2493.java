@@ -12,9 +12,6 @@ public class Main {
     static int temp;
     static Stack<int[]> top;
 
-    static int[] ans;
-    static int indexTemp;
-
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,7 +23,6 @@ public class Main {
         st = new StringTokenizer(br.readLine());
 
         top = new Stack<>();
-        ans = new int[n + 1];
 
         // input & init
         for (int i = 1; i <= n; i++) {
@@ -46,5 +42,3 @@ public class Main {
 
         }
 }
-
-
