@@ -4,110 +4,128 @@ import java.util.*;
 import javax.sound.sampled.SourceDataLine;
 
 /*  
- *  백준 17144 미세먼지 안녕
- *  https://www.acmicpc.net/problem/17144
+ *  백준 14891 톱니바퀴
+ *  https://www.acmicpc.net/problem/14891
  */ 
 
 public class Main {
     
-    static int row, col, time;
-
+    static int n, res;
+    static int point[];
     static int[][] list;
-    static int[][] listTemp;
-
-    static int my[] = {-1, 1, 0, 0};
-    static int mx[] = {0, 0, -1, 1};
-
     static ArrayList<int[]> swing;
-    static int[] highAP;
-    static int[] lowAP;
+    static String temp;
 
     public static void main(String[] args) throws IOException {
 
         // input
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st;
 
-        row = Integer.parseInt(st.nextToken());
-        col = Integer.parseInt(st.nextToken());
-        time = Integer.parseInt(st.nextToken());
-
-        list = new int[row][col];
-        listTemp = new int[row][col];
-
-
-        highAP = new int[2];
-        lowAP = new int[2];
-
-
-        // input
-        for (int i = 0; i < row; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < col; j++) {
-                list[i][j] = Integer.parseInt(st.nextToken());
-                // 공기청정기 위치 저장, 0으로 초기화 되고, 공기청정기는 무조건 위 아래 벽으로 2칸 이상 떨어져 있으므로, 윗공기청정기가 0이 아니면 아래 청정기다.
-                if (list[i][j] == -1) {
-                    if (highAP[0] == 0) {
-                        highAP[0] = i;
-                        highAP[1] = j;
-                    }
-                    else {
-                        lowAP[0] = i;
-                        lowAP[1] = j;
-                    }
-                }
+        list = new int[4][8];
+        for (int i = 0; i < 4; i++) {
+            temp = br.readLine();
+            for (int j = 0; j < 8; j++) {
+                list[i][j] = temp.charAt(j) - '0';
             }
         }
+        // System.out.println(Arrays.toString(list[0]));
+        // System.out.println(Arrays.toString(list[1]));
+        // System.out.println(Arrays.toString(list[2]));
+        // System.out.println(Arrays.toString(list[3]));
+
+        n = Integer.parseInt(br.readLine());
+        swing = new ArrayList<>();
+        point = new int[4];
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            int wheel = Integer.parseInt(st.nextToken());
+            int ori = Integer.parseInt(st.nextToken());
+            swing.add(new int[] {wheel - 1, ori});
+        }
+
+        // 12clock -> 0 index
+        // 3 -> 2 index
+        // 9 -> 6 index
+        
+        // ori -1 -> anticlockwise
+        // ori +1 -> clockwise
+
+        /*
+         * touch list
+         * 1) list[0][2] and list[1][6];
+         * 2) list[1][2] and list[2][6];
+         * 3) list[2][2] and list[3][6];
+         */
 
         // execute
-        for (int i = 0; i < time; i++) {
-            listTemp = new int[row][col];
-            spread();
-            calcSpread();
-            printing(list);
-            //excuteAp();
+        for (int i = 0; i < n; i++) {
+            int wheel = swing.get(i)[0];
+            int ori = swing.get(i)[1];
+
+            int[] pointTemp = point;
+
+            leftSwing(wheel, ori, pointTemp);
+            rightSwing(wheel, ori, pointTemp);
+            swing(wheel, ori, point);
         }
 
-    
-    }
+        if (list[0][point[0]] == 1)
+            res += 1;
+        if (list[1][point[1]] == 1)
+            res += 2;
+        if (list[2][point[2]] == 1)
+            res += 4;
+        if (list[3][point[3]] == 1)
+            res += 8;
+        System.out.println(res);
+        }
 
-    public static void spread() {
-       for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (list[i][j] >= 5) {
-                    int spreadAmount = list[i][j] / 5;
-                    int count = 0;
-                    for (int k = 0; k < 4; k++) {
-                        int nextRow = i + my[k];
-                        int nextCol = j + mx[k];
-                        if (nextRow >= row || nextRow < 0 || nextCol >= col || nextCol < 0 || list[nextRow][nextCol] == -1)
-                            continue;
-                        listTemp[nextRow][nextCol] += spreadAmount;
-                        count++;
-                    }
-                    list[i][j] = list[i][j] - (spreadAmount * count);
+        static void swing(int wheel, int ori, int[] point) {
+            // clockwise
+            if (ori == -1) {
+                point[wheel]++;
+                if (point[wheel] > 7)
+                    point[wheel] -= 8;
+            } else if (ori == 1) {
+                point[wheel]--;
+                if (point[wheel] < 0)
+                    point[wheel] += 8;
+            }
+        }
+        
+        static void leftSwing(int wheel, int ori, int[] pointTemp) {
+            
+            if (wheel > 0) {
+                int touchpoint = pointTemp[wheel] - 2;
+                if (touchpoint < 0)
+                    touchpoint += 8;
+                int touchpointLeft = pointTemp[wheel - 1] + 2;
+                if (touchpointLeft > 7)
+                    touchpointLeft -= 8;
+                if (list[wheel][touchpoint] != list[wheel - 1][touchpointLeft]) {
+                    //System.out.println("leftswing");
+                    leftSwing(wheel - 1, ori * -1, pointTemp);
+                    swing(wheel - 1, (ori * -1), point);
+                }
+            }
+        }
+
+        static void rightSwing(int wheel, int ori, int[] pointTemp) {
+            
+            if (wheel < 3) {
+                int touchpoint = pointTemp[wheel] + 2;
+
+                if (touchpoint > 7)
+                    touchpoint -= 8;
+                int touchpointRight = pointTemp[wheel + 1] - 2;
+                if (touchpointRight < 0)
+                    touchpointRight += 8;
+                if (list[wheel][touchpoint] != list[wheel + 1][touchpointRight]) {
+                    rightSwing(wheel + 1, ori * -1, pointTemp);
+                    swing(wheel + 1, (ori * -1), point);
                 }
             }
         }
     }
-
-    public static void calcSpread() {
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                list[i][j] = list[i][j] + listTemp[i][j];
-            }
-        }
-    }
-    
-    public static void executeAP() {
-
-    }
-
-    public static void printing(int[][] list) {
-        for (int i = 0; i < row; i++) {
-            System.out.println(Arrays.toString(list[i]));
-        }
-    }
-}
