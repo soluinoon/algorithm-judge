@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 /*
- * 1992 쿼드트리
+ * 15649 쿼드트리
  * 
  */
 
