@@ -25,7 +25,7 @@ public class Main {
         queen = new int[n];
 
         // excute;
-        for ()
+        
 
     }
 

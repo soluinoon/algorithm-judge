@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 /*
- * 15649 쿼드트리
+ * 1780 종이의 갯수
  * 
  */
 
@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
         sb = new StringBuilder();
 
         n = Integer.parseInt(br.readLine());
@@ -23,9 +24,9 @@ public class Main {
         list = new int[n][n];
         ans = new int[3];
         for (int i = 0; i < n; i++) {
-        String temp = br.readLine();
+            st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
-                list[i][j] = temp.charAt(j) - '0';
+                list[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
@@ -40,16 +41,17 @@ public class Main {
     public static void checkAndDivide(int startRow, int endRow, int startCol, int endCol) {
         
         int colorTemp = list[startRow][startCol];
-
+        //System.out.println("ct = "  + colorTemp);
         if (checkEnd(startRow, endRow, startCol, endCol) != -2) {
             ans[colorTemp + 1]++;
             return;
         }
 
         int aredDivideNumber = (endRow - startRow - 2) / 3;
+        //System.out.println("areaDivideNumber = " + aredDivideNumber);
         // (1,1) ~ (1,3) area
         checkAndDivide(startRow, startRow + aredDivideNumber, startCol, startCol + aredDivideNumber);
-        checkAndDivide(startRow + aredDivideNumber, startRow + aredDivideNumber, startCol + aredDivideNumber + 1, endCol - aredDivideNumber - 1);
+        checkAndDivide(startRow, startRow + aredDivideNumber, startCol + aredDivideNumber + 1, endCol - aredDivideNumber - 1);
         checkAndDivide(startRow, startRow + aredDivideNumber, endCol - aredDivideNumber, endCol);
 
         // 2,1 ~ 2,3 area
