@@ -17,7 +17,7 @@ class Main {
         makingPrice = Integer.parseInt(st.nextToken());
         sellPrice = Integer.parseInt(st.nextToken());
 
-        if (makingPrice > sellPrice) {
+        if (makingPrice >= sellPrice) {
             System.out.println(-1);
             return;
         }
