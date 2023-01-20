@@ -16,6 +16,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int temp = Integer.parseInt(br.readLine());
             arr[i] = temp;
+
         }
 
         // 정렬을 해줍니다
