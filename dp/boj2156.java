@@ -15,7 +15,7 @@ public class Main {
 
         int n = Integer.parseInt(br.readLine());
 
-        wines = new int[n + 1];
+        wines = new int[10001];
         for (int i = 1; i <= n; i++) {
             wines[i] = Integer.parseInt(br.readLine());
         }
@@ -34,12 +34,9 @@ public class Main {
         for (int i = 4; i <= n; i++) {
             System.out.println("wines[" + i + "] = " + wines[i]);
             System.out.print("i = " + i + " ");
-            dp[i] = wines[i] + Math.max(dp[i - 3] + wines[i - 1], dp[i - 2]);
-            if (dp[i] > max) {
-                max = dp[i];
-            }
+            dp[i] = Math.max(wines[i] + Math.max(dp[i - 3] + wines[i - 1], dp[i - 2]), dp[i - 1]);
             System.out.println("dp = " + dp[i]);
         }
-        System.out.println(max);
+        System.out.println(dp[n]);
     }
 }
