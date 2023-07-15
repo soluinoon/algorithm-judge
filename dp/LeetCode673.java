@@ -1,48 +1,42 @@
 class Solution {
     public int findNumberOfLIS(int[] nums) {
         int[] dp = new int[nums.length];
-        int max = 0;
-        dp[0] = 1;
+        int[] count = new int[nums.length];
+        int max = 1;
 
-        for (int i = 1; i < dp.length; i++) {
+        for (int i = 0; i < nums.length; i++) {
             dp[i] = 1;
-            if (nums[i - 1] == nums[i]) {
-                dp[i] = dp[i - 1];
-            } else if (nums[i - 1] < nums[i]) {
-                dp[i] = dp[i - 1] + 1;
-            } else {
-                for (int j = 0; j < i - 1; j++) {
-                    System.out.println("j = " + j + " i = " + i);
-                    System.out.println("DP = " + dp[j]);
-                    if (nums[j] == nums[i]) {
-                        dp[i] = Math.max(dp[j], dp[i]);
-                    } else if (nums[j] < nums[i]) {
-                        dp[i] = Math.max(dp[j] + 1, dp[i]);
+            count[i] = 1;
+
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    if (dp[j] + 1 > dp[i]) {
+                        dp[i] = dp[j] + 1;
+                        count[i] = count[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        count[i] += count[j];
                     }
                 }
             }
             max = Math.max(max, dp[i]);
         }
-        int count = 0;
-        if (max == 1) {
-            for (int i = 0; i < nums.length; i++) {
-                if (nums[0] == nums[i]) {
-                    count++;
-                }
-            }
-        } else {
-            System.out.println("max = " + max);
-            for (int i = 0; i < dp.length; i++) {
-                int number = dp[i];
-                if (number == max) {
-                    for (int j = 0; j < i; j++) {
-                        if (dp[j] == max || dp[j] == max - 1) {
-                            count++;
-                        }
-                    }
-                }
+
+        // print(dp);
+        // print(count);
+        int answer = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (dp[i] == max) {
+                answer += count[i];
             }
         }
-        return count;
+        
+        return answer;
+    }
+
+    private void print(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
     }
 }
