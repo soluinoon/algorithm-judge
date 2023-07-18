@@ -1,8 +1,25 @@
-# BOJ
+# 🧑🏻‍💻 알고리즘 저지 레포지토리
 
-## Overview
-Repository that records problems solved on algorithm online judge.
+알고리즘 저지 사이트의 문제들을 풀고 기록하는 레포지토리 입니다.
+몇몇 문제들은 제 벨로그에 풀이가 있습니다.
 
-Some problems have solution on my Velog
+## 📁 파일 이름 및 커밋 전략
+파일 이름은 알고리즘 저지 사이트(영문) + 문제번호로 설정합니다.
 
-https://velog.io/@soluinoon
+커밋은 add + 알고리즘 저지 사이트(국문) + 문제명으로 설정합니다.
+
+ex) 리트코드 449번 문제 "Two Sum Array"
+
+```
+LeetCode449.java
+
+class ~
+```
+> add: 리트코드 Two Sum Array
+
+## 🌍 풀이중인 알고리즘 저지 사이트 목록
+* LeetCode
+
+* Backjoon
+
+* Programmers
